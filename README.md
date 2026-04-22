@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Slice
 
-## Getting Started
+*Slice an HTML page into publish-ready images.*
 
-First, run the development server:
+Slice is a fast, server-rendered Next.js app that takes an HTML file (or ZIP with assets) and renders its sections into a downloadable ZIP of PNG images.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
+- Fast Refresh with Turbopack and React Compiler
+- Server-side rendering using Playwright Chromium
+- Extract by CSS selector with **Free AI Auto-detect** (via Gemini)
+- Format and Scale output settings
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## AI Auto-Detect Setup (Optional)
+You can use either the free Gemini API or a local Ollama instance to automatically detect your HTML structure.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Option A: Gemini (Fastest, requires free key)**
+1. Go to [Google AI Studio](https://aistudio.google.com/) and create a free API key.
+2. Copy `.env.example` to `.env` and set `GEMINI_API_KEY="your_key"`.
 
-## Learn More
+**Option B: Local Ollama (Private, runs on your machine)**
+1. Ensure Ollama is running locally.
+2. Copy `.env.example` to `.env` and set:
+   - `OLLAMA_MODEL="gemma4"` (or whichever model you have pulled, e.g. `llama3`)
+   - `OLLAMA_URL="http://127.0.0.1:11434"` (default)
 
-To learn more about Next.js, take a look at the following resources:
+## Local Development
+1. Install dependencies: `pnpm install`
+2. Run dev server: `pnpm run dev`
+3. Drop the `examples/test-carousel.html` to test.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment to Coolify
+1. Push this repository to GitHub.
+2. In your Coolify dashboard, click **New Resource** → **Application** → **Public Repository** (or Private if you prefer).
+3. Set the **Build Pack** to `Dockerfile`.
+4. Set the **Port** to `3000`.
+5. Set the **Health Check Path** to `/api/health`.
+6. Click **Deploy**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The custom multi-stage Dockerfile uses the official Playwright base image (`mcr.microsoft.com/playwright:v1.59.1-jammy`), so there is no need to manually install Chromium dependencies.
